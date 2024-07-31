@@ -1,0 +1,737 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+     #shopify-section-{{id}} {
+       box-sizing: border-box;
+       margin-top: {{section.settings.margin_top | append: 'px'}};
+       margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+       padding-top: {{section.settings.padding_top | append: 'px'}};
+       padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+       background: var(--Primary, #603);
+     }
+
+     @media(max-width: 1023px) {
+       #shopify-section-{{id}} {
+         margin-top: {{section.settings.margin_top_m | append: 'px'}};
+         margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+         padding-top: {{section.settings.padding_top_m | append: 'px'}};
+         padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+       }
+     }
+     .footer-top-{{ id }}{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 40px;
+        padding: 40px 0;
+        border-top: 1px solid #99004D;
+     }
+    .footer-logo img{
+      max-width: 220px;
+      object-fit: cover;
+      margin-block-end: 24px;
+    }
+    .footer-logo a{
+      text-decoration: none;
+    }
+    .footer-logo div a,
+    .footer-logo div p{
+      color: #FFF;
+      font-size: 16px;
+      line-height: 20px;
+      margin: 0;
+    }
+    .footer-logo p:nth-of-type(2){
+      text-decoration-line: underline;
+    }
+     .footer-menu-{{ id }}{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 40px;
+       @media(max-width: 768px){
+         grid-template-columns: 1fr;
+       }
+     }
+     .footer-menu-item-{{ id }} h4, .footer-links-{{ id }} h4{
+       color: #FFFFFF;
+       font-size: 16px;
+       line-height: normal;
+        margin: 0;
+        margin-bottom: 20px;
+     }
+     .footer-menu-item-{{ id }} a{
+       display: flex;
+       align-items: center;
+       gap: 12px;
+       width: max-content;
+       color: #FFFFFF;
+       font-size: 14px;
+       line-height: 18px;
+       text-decoration: none;
+       padding: 0 0 12px 0;
+     }
+      .footer-contents-{{ id }}{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 0 auto 40px auto;
+      }
+     .footer-contents-{{ id }} > h2{
+        color: #FFF;
+        font-size: 24px;
+        line-height: 28px;
+        margin: 0;
+     }
+     .footer-contents-{{ id }} > p{
+       color: #FFFFFF;
+       font-size: 18px;
+       line-height: 150%; /* 24px */
+       letter-spacing: -0.32px;
+       margin: 0;
+     }
+     .footer-newsletter-{{ id }}{
+     margin: 16px 0 0 0;
+
+       width: 100%;
+     }
+     .footer-newsletter-{{ id }} .field-cf{
+       position: relative;
+     }
+     .footer-newsletter-{{ id }} input{
+      color: #fff;
+      font-size: 16px;
+      line-height: 20px;
+      border: none;
+      box-shadow: none;
+      background: #4D0026;
+      outline: none;
+      padding: 0 16px;
+      width: 100%;
+      border-radius: 4px;
+      height: 48px;
+     }
+    .footer-newsletter-{{ id }} input:focus{
+      border: none;
+      outline: none;
+      box-shadow: none;
+    }
+     .footer-newsletter-{{ id }} input::placeholder{
+       color: #fff;
+       font-size: 16px;
+       line-height: normal;
+       font-family: Satoshi regular;
+     }
+     .footer-newsletter-{{ id }} button{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 0;
+        border: none;
+        outline: none;
+        box-shadow: none;
+        background: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: var(--Content-Base-main, #1F2937);
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: -0.4px;
+        font-family: satoshi regular;
+        border-radius: 4px;
+        height: 48px;
+        padding: var(--Spacing-Container-0, 0px) var(--Spacing-Container-lg, 32px);
+     }
+    .footer-newsletter-{{ id }} > p{
+       color: #FFFFFF;
+       font-size: 14px;
+       line-height: normal;
+       margin: 18px 0 22px;
+     }
+     .footer-icons-{{ section.id }} a{
+       display: block;
+       width: max-content;
+       font-size: 0;
+       line-height: 0;
+     }
+     .footer-icons-{{ section.id }} a img{
+       max-width: 17px;
+     }
+     .footer-bottom-{{ id }}{
+       display: flex;
+       align-items: center;
+       justify-content: space-between;
+     }
+
+     .footer-links-{{ id }} a{
+       color: #FFFFFF;
+       font-size: 18px;
+       line-height: 200%;
+       text-decoration: none;
+       display: flex;
+       align-items: center;
+       gap: 13px;
+     }
+     .footer-copytexts-{{ id }} h6{
+       color: #FFFFFF;
+       font-size: 18px;
+       font-weight: 400;
+       line-height: normal;
+       margin: 0;
+     }
+     .footer-payment-text{
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 40px;
+     }
+     .footer-payments{
+       display: flex;
+       align-items: center;
+       flex-wrap: wrap;
+       gap: 12px;
+     }
+     .footer-payment__item{
+       font-size: 0;
+       line-height: 0;
+     }
+     .footer-copytexts-{{ id }} h6{
+       font-size: 16px;
+     }
+     .footer-privacy-{{ id }} a{
+        text-decoration: none;
+        color: #ffffff;
+        font-size: 16px;
+        margin-right: 5px;
+     }
+
+    @media screen and (min-width: 768px){
+      .newsletter-form__field-wrapper > .field-cf{
+        /* max-width: 350px; */
+        min-width: 350px;
+      }
+    }
+     @media screen and (min-width: 1024px){
+       .accordion__icons{
+         display: none;
+       }
+       .footer-contents-{{ id }}{
+         max-width: 480px;
+       }
+
+     }
+     @media screen and (min-width: 1560px){
+        .footer-top-{{ id }} > div{
+          position: relative;
+        }
+       .footer-top-{{ id }} > div:not(:last-child):after{
+         content: "";
+         position: absolute;
+         top: 0;
+         width: 1px;
+         height: 100%;
+         /* background-color: #D9D9D9; */
+       }
+       .footer-top-{{ id }} > div:nth-of-type(1):after{
+         right: -45%;
+       }
+       .footer-top-{{ id }} > div:nth-of-type(2):after{
+         right: -20%;
+       }
+     }
+     @media screen and (max-width: 1023px){
+       .footer-top-{{ id }}{
+         flex-direction: column;
+         gap: 40px;
+       }
+       .footer-logo p {
+        font-size: 16px;
+      }
+       .footer-menu-{{ id }}{
+         flex-direction: column;
+         gap: 0px;
+       }
+      .footer-logo img{
+        margin-block-end: 24px;
+      }
+
+
+        .faq__intro {
+         position: relative;
+          padding: 0 0 40px 0;
+         cursor: pointer;
+        }
+       .faq__intro h4 {
+         font-size: 16px;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin: 0;
+         transition: all 0.2s;
+         text-transform: uppercase;
+       }
+       .accordion__content-item {
+         /* max-height: 0;
+         overflow: hidden;
+         will-change: max-height;
+         transition: all 0.2s; */
+         /* opacity: 0; */
+       }
+       .faq__item.accordion__active .accordion__content-item{
+         margin: 0 0 12px;
+       }
+       .faq__item{
+         position: relative;
+       }
+       .accordion__icons{
+         font-size: 0;
+         line-height: 0;
+         position: relative;
+       }
+       .accordion__icons svg:nth-of-type(1){
+         opacity: 1;
+         transform: rotate(0);
+         transition: all 0.2s linear;
+       }
+       .faq__item.accordion__active .accordion__icons svg:nth-of-type(1){
+         opacity: 0;
+         transform: rotate(180deg);
+       }
+       .faq__item.accordion__active .accordion__icons svg:nth-of-type(2){
+         opacity: 1;
+         transform: rotate(180deg);
+       }
+       .accordion__icons svg:nth-of-type(2){
+         position: absolute;
+         top: 0;
+         left: 0;
+         opacity: 0;
+         transform: rotate(0);
+         transition: all 0.2s linear;
+       }
+       .faq__item.accordion__active .accordion__icons svg:nth-of-type(2){
+         opacity: 1;
+         transform: rotate(180deg);
+       }
+      .footer-newsletter-{{ id }}{
+        margin: 12px 0;
+      }
+      .footer-newsletter-{{ id }} > p{
+         margin: 16px 0 16px;
+       }
+      .footer-newsletter-{{ id }} input{
+        font-size: 14px;
+        padding: 12px 16px;
+       }
+       .footer-newsletter-{{ id }} input::placeholder{
+         font-size: 14px;
+       }
+       .footer-newsletter-{{ id }} button{
+          padding: 8px 16px;
+       }
+       .footer-icons-{{ section.id }}{
+         gap: 16px;
+         margin: 30px 0 0;
+         justify-content: center;
+       }
+
+       .footer-links-{{ id }} a{
+         color: #FFF;
+         font-size: 12px;
+         line-height: normal;
+         text-decoration: none;
+       }
+       .footer-copytexts-{{ id }} h6{
+         font-size: 16px;
+       }
+
+      .footer-payment-text{
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+       }
+      .footer-payment-text a{
+        font-size: 16px;
+      }
+     }
+    @media screen and (max-width: 768px){
+     .footer-contents-{{ id }} {
+         align-items: start;
+     }
+     .footer-contents-{{ id }} > h2{
+         font-size: 20px;
+         line-height: 24px;
+     }
+     .footer-top-{{ id }} {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          padding: 24px 0;
+           border-top: 1px solid #99004D;
+      }
+      .footer-menu-item-{{ id }} a{
+         font-size: 14px;
+
+      }
+    .footer-contents-{{ id }} {
+       margin: 0 0 24px 0;
+    }
+    .faq__intro {
+      padding: 0 0 20px 0;
+    }
+    .footer-bottom-{{ id }} {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      gap: 10px;
+    }
+    .faq__item {
+      padding-top: 24px;
+  }
+    .sec-{{ id }} .page-width{
+      padding: 24px 16px;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="footer-contents-{{ id }}">
+        <h2>Stay up to date with Bodyish</h2>
+        <div class="footer-newsletter-{{ id }}">
+          {% render 'custom-newsletter' %}
+        </div>
+      </div>
+      <div class="footer-top-{{ id }}">
+        <div class="footer-logo">
+          {% if section.settings.logo %}
+            {{ section.settings.logo | image_url: width: 220 | image_tag }}
+          {% else %}
+            <h2>{{ shop.name }}</h2>
+          {% endif %}
+          <div>
+            <p>{{ section.settings.phone }}</p>
+            <a href="mailto:{{ section.settings.mail }}">{{ section.settings.mail }}</a>
+          </div>
+        </div>
+        <div class="footer-menu-{{ id }}">
+          {% for block in section.blocks %}
+            {% if block.type == 'menu' %}
+              <div class="faq__item faq__item-{{ id }} footer-menu-item-{{ id }}">
+                <div class="faq__intro">
+                  <h4>
+                    <span class="faq__intro-text">{{ block.settings.menu.title }}</span
+                    ><span class="accordion__icons">
+                      {%- render 'all-icons', name: 'plus' -%}
+                      {%- render 'all-icons', name: 'minus' -%}
+                    </span>
+                  </h4>
+                </div>
+                <div class="accordion__content-item">
+                  {% for link in block.settings.menu.links %}
+                    <a href="{{ link.url }}">{{ link.title }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+          <div class="faq__item faq__item-{{ id }} footer-menu-item-{{ id }}">
+            <div class="faq__intro">
+              <h4>
+                <span class="faq__intro-text">Social</span
+                ><span class="accordion__icons">
+                  {%- render 'all-icons', name: 'plus' -%}
+                  {%- render 'all-icons', name: 'minus' -%}
+                </span>
+              </h4>
+            </div>
+            <div class="accordion__content-item">
+              {% for block in section.blocks %}
+                {% if block.type == 'icons' %}
+                  <a href="{{ block.settings.link }}">
+                    {{ block.settings.image | image_url: width: 17 | image_tag }}
+                    {% if block.settings.title != blank %}
+                      {{ block.settings.title }}
+                    {% endif %}
+                  </a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom-{{ id }}">
+        <div class="footer-copytexts-{{ id }}">
+          <h6>© Copyright, Bodyish</h6>
+        </div>
+        <div class="footer-privacy-{{ id }}">
+          <a href="{{ section.settings.privacy }}">Privacy Policy</a>
+          <a href="{{ section.settings.terms }}">Terms of Service</a>
+        </div>
+        <div class="footer-payment-text">
+          <!--
+            {% if shop.enabled_payment_types.size > 0 %}
+              <div class="footer-payments">
+                {%- for type in shop.enabled_payment_types -%}
+                  <div class="footer-payment__item">
+                    {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                  </div>
+                {%- endfor -%}
+              </div>
+            {% endif %}
+          -->
+          <div class="footer-payments">
+            {% for block in section.blocks %}
+              {% if block.type == 'payments' %}
+                <div class="footer-payment__item">
+                  <a href="{{ block.settings.payment_url }}">
+                    {{
+                      block.settings.payment_image
+                      | image_url: width: block.settings.payment_image.width
+                      | image_tag
+                    }}
+                  </a>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // function initializeAccordions() {
+  //   if (screen.width < 1024) {
+  //     const accordions = document.querySelectorAll(".faq__item.faq__item-{{ id }}");
+  //     const openAccordion = (accordion) => {
+  //       const content = accordion.querySelector(".accordion__content-item");
+  //       accordion.classList.add("accordion__active");
+  //       content.style.maxHeight = content.scrollHeight + "px";
+  //       content.style.opacity = 1;
+  //     };
+
+  //     const closeAccordion = (accordion) => {
+  //       const content = accordion.querySelector(".accordion__content-item");
+  //       accordion.classList.remove("accordion__active");
+  //       content.style.maxHeight = null;
+  //       content.style.opacity = 0;
+  //     };
+
+  //     accordions.forEach((accordion, index) => {
+  //       const intro = accordion.querySelector(".faq__intro");
+  //       const content = accordion.querySelector(".accordion__content-item");
+
+  //       if (intro && content) {
+  //         intro.onclick = () => {
+  //           if (content.style.maxHeight) {
+  //             closeAccordion(accordion);
+  //           } else {
+  //             accordions.forEach((accordion) => closeAccordion(accordion));
+  //             openAccordion(accordion);
+  //           }
+  //         };
+
+  //         if (index === 0) {
+  //           openAccordion(accordion);
+  //         }
+  //       } else {
+  //         console.error("Accordion header or content not found.");
+  //       }
+  //     });
+  //   }
+  // }
+
+  // window.addEventListener('DOMContentLoaded', initializeAccordions);
+</script>
+
+{% schema %}
+{
+  "name": "Custom Footer",
+  "class": "lazyload",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Footer Logo"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone"
+    },
+    {
+      "type": "text",
+      "id": "mail",
+      "label": "Mail"
+    },
+    {
+      "type": "url",
+      "id": "privacy",
+      "label": "Privacy link"
+    },
+    {
+      "type": "url",
+      "id": "terms",
+      "label": "Terms link"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+
+      ]
+    },
+    {
+      "type": "icons",
+      "name": "Icons",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+
+      ]
+    },
+    {
+      "type": "payments",
+      "name": "Payments",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "payment_image",
+          "label": "Payment Method Image"
+        },
+        {
+          "type": "url",
+          "id": "payment_url",
+          "label": "Payment Method Url"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Footer"
+    }
+  ]
+}
+{% endschema %}

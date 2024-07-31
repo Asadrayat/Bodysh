@@ -1,0 +1,1065 @@
+<style>
+      .my-cart-sec div:empty{
+        display: block !important;
+      }
+      .my-cart-sec button{
+        border: none;
+      }
+      .my-cart-sec button:focus-visible{
+        border: none;
+        outline: none;
+      }
+      .my-cart-sec{
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,50%);
+        z-index: 399;
+        visibility: hidden;
+      }
+      .my-cart.my-cart-sec.active{
+        visibility: visible;
+      }
+      .js-show-ajax-cart .my-cart-sec{
+        visibility: visible;
+      }
+      .mcart-container{
+        position: fixed;
+        right: -544px;
+        top: 10px;
+        width: 534px;
+        height: calc(100vh - 20px);
+        color: rgb(22, 37, 67);
+        background: white;;
+        /* border-radius: 15px; */
+        box-sizing: border-box;
+        border: 0 solid #e2e8f0;
+        overflow: hidden;
+        z-index: 400;
+        transition: .3s ease-in;
+        opacity: 0;
+        padding-bottom: 15px;
+      }
+      .my-cart.my-cart-sec.active .mcart-container{
+        right: 10px;
+        opacity: 1;
+      }
+      .js-show-ajax-cart .mcart-container{
+        right: 10px;
+        opacity: 1;
+      }
+      .mcart-container.loading:after{
+        position: absolute;
+        content: "";
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 5;
+        background: rgba(0,0,0,10%);
+        cursor: no-drop;
+      }
+
+      .mcart-wrapper {
+        overflow: auto;
+        min-height: 100vh;
+        height: 100%;
+      }
+      .mcart-wrapper::-webkit-scrollbar{
+        width: 6px;
+        background: var(--Primary, #000);
+        display: none;
+      }
+      .mcart-header {
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 5;
+        border-bottom: 1px solid #111827;
+      }
+      .mcart-heading {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        /* border-radius: 9px 0px 0px 0px; */
+        background: #fff;
+        color: #000;
+        box-sizing: border-box;
+        padding: 18px 28px;
+        align-items: center;
+      }
+      .mcart-heading-p {
+        font-family: satoshi medium;
+        color: #000;
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        text-transform: uppercase;
+        margin: 0;
+        @media(max-width:768px){
+          font-size: 24px;
+          line-height: 28px;
+        }
+      }
+      .mcart-close-btn {
+        height: 22px;
+        width: 22px;
+        background: white;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .mcart-close-btn svg{
+        width: 10px;
+        height: 10px;
+      }
+      .mcart-body.my-cart__items {
+        display: flex;
+        flex-direction: column;
+        min-height: 85%;
+        justify-content: space-between;
+        @media (max-width:768px){
+          /* min-height: 70%; */
+        }
+      }
+      .mcart-items-wrapper {
+        box-sizing: border-box;
+        padding-inline: 28px;
+      }
+      .mcart-item{
+        display: grid;
+        grid-template-columns: 100px 1fr 50px;
+        grid-gap: 15px;
+        box-sizing: border-box;
+        padding: 15px 0px;
+        border-bottom: 1px solid #60dbd952;
+        position: relative;
+        @media(max-width:768px){
+           grid-template-columns: 80px 1fr 50px;
+        }
+      }
+      .mcart-item-error-msg{
+        position: absolute;
+        min-height: 35px;
+        width: 45%;
+        right: 0;
+        bottom: 3px;
+        background: #000;
+        border-radius: 6px;
+        color: white;
+        box-sizing: border-box;
+        padding: 2px 6px;
+        font-size: 12px;
+        opacity: 0;
+        z-index: -1;
+        transition: .2s;
+        transform: translateY(5px);
+      }
+      .mcart-item.error .mcart-item-error-msg{
+        opacity: 1;
+        z-index: 2;
+        transform: translateY(0px);
+      }
+      .mcart-media {
+        display: flex;
+        align-items: center;
+      }
+      .mcart-media img{
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        aspect-ratio: 1;
+        object-fit: contain;
+      }
+      .mcart-action {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      mc-quantity {
+        display: grid;
+        grid-template-columns: 15px minmax(35px, 1fr) 15px;
+        grid-gap: 5px;
+        justify-items: center;
+        border-radius: 2px;
+        border: 0.5px solid #CFCFF6;
+        box-sizing: border-box;
+        height: 24px;
+        align-items: center;
+        border: 1px solid #F0F0F0;
+        background: #F7F7F7;
+      }
+      mc-quantity button {
+        /* background: #000; */
+      }
+      .mcart-qty-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        border: none;
+      }
+      .mcart-qty-btn svg{
+        width: 7px;
+        height: 7px;
+      }
+      mc-quantity p {
+        margin: 0;
+        color: #212121;
+        text-align: center;
+        /* font-family: hn500; */
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        opacity: .8;
+      }
+      .mcart-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+      }
+      .mcart-final-price{
+        color: #111827;
+        /* text-align: right; */
+        /* font-family: hn500; */
+        font-size: 20px;
+        line-height: 24px;
+        font-style: normal;
+        /* font-weight: 600; */
+        margin: 0;
+        .product-option {
+          font-size: 20px;
+          line-height: 24px;
+          @media(max-width:768px){
+            font-size: 18px;
+            line-height: 20px;
+          }
+        }
+      }
+      .mcart-item-option {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .mcart-item-option p {
+         margin-block: 0px;
+      }
+      .mcart-item-title{
+        color: #212121;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0 0 9px 0;
+      }
+      /* .discount--container{
+        list-style-type: none;
+
+      } */
+      .mcart-item-title a{
+        text-decoration: none;
+        color: #111827;
+        /* font-family: Satoshi; */
+        font-size: 20px;
+        line-height: 24px;
+        letter-spacing: -0.32px;
+        @media(max-width:768px){
+          font-size: 18px;
+          line-height: 20px;
+        }
+      }
+      .mcart-item-options{
+        margin-bottom: 2px;
+        display: none;
+      }
+      .mcart-item-options: is(strong, p) {
+        color: #212121;
+        font-size: 16px;
+        font-style: normal;
+        line-height: normal;
+        margin: 0;
+      }
+      .mcart-subscription p{
+        color: #3D3D3D;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin: 0;
+      }
+      .condition-slide {
+        box-sizing: border-box;
+        padding-inline: 28px;
+        padding-top: 18px;
+        padding-bottom: 25px;
+      }
+      .mcart-items-footer{
+        box-sizing: border-box;
+        padding-inline: 28px;
+        border-top: 1px solid #E4E7EC;
+      }
+      .mcart-subtotals{
+        display: flex;
+        justify-content: space-between;;
+        align-items: center;
+        margin-block: 10px;
+      }
+      .mcart-subtotal-title{
+        color: var(--Primary, #111827);
+        font-size: 22px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        margin: 0;
+      }
+      .mcart-subtotal-price{
+        color: var(--Primary, #111827);
+        font-size: 22px;
+        font-style: normal;
+        /* font-weight: 600; */
+        line-height: normal;
+        margin: 0;
+        text-align: right;
+      }
+      .mcart-coupon{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 6px;
+        margin-top: 18px;
+        display: none;
+      }
+      .mcart-coupon button{
+        width: 14.77px;
+        height: 14.77px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #111827;
+        padding: 0;
+        border: none;
+      }
+      .mcart-coupon svg{
+        width: 6.714px;
+        height: 6.714px;
+        stroke: white;
+      }
+      .mcart-coupon h5{
+        color: #111827;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+        opacity: 0.5;
+      }
+      .mcart-checkout{
+        margin-top: 18px;
+      }
+      #mcart-checkout-form button{
+        border-radius: 4px;
+        /* background: var(--Primary, #CC00CC); */
+        background: #603;
+        width: 100%;
+        height: 42px;;
+        color: var(--Pure-White, #FFF);
+        text-align: center;
+        font-size: 24px;
+        font-family: satoshi medium;
+        font-style: normal;
+        /* font-weight: 600; */
+        line-height: 24px;
+        /* text-transform: uppercase; */
+        cursor: pointer;
+        border: none;
+        @media(max-width:768px){
+          font-size: 16px;
+          line-height: 20px;
+        }
+      }
+      button.proceed_checkout_button:disabled {
+        cursor: not-allowed;
+        opacity: .5;
+      }
+      .mcart-continue-shopping {
+        /* color: var(--Primary, #111827); */
+        color: #603;
+        text-align: center;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 24px;
+        text-decoration-line: none;
+        text-transform: capitalize;
+        margin-top: 12px;
+        display: block;
+        /* font-family: oswald; */
+        @media(max-width:768px){
+          font-size: 16px;
+          line-height: 20px;
+        }
+      }
+      
+      .mcart-featured-collection{
+        padding-bottom: 20px;
+        padding-inline: 28px;
+      }
+      .mcart-fc-show-details{
+        color: var(--Primary, #3D3D3D);
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 20px;
+        text-decoration: none;
+      }
+      .mcart-fc-btn{
+        color: #FFF;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 1;
+        border-radius: 2px;
+        background: var(--Primary, #111827);
+        height: 28px;
+        width: max-content;
+        box-sizing: border-box;
+        padding-inline: 16px;
+        border-radius: 50px;
+      }
+      .mcart-fc-price{
+        color: var(--Primary, #111827);
+        text-align: right;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        margin: 0;
+      }
+      .mcart-fc-heading{
+        background: var(--Primary, #111827);
+        height: 42px;
+        line-height: 42px;
+        border-radius: 4px;
+        box-sizing: border-box;
+        padding-inline: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 33px;
+      }
+      .mcart-fc-heading h3{
+        color: #FFF;
+        font-size: 18px;
+        font-style: normal;
+        font-weight: 600;
+        margin: 0;
+      }
+      .mcart-empty-wrapper h3{
+        text-align: center;
+        margin: 41px 0 40px 0;
+        text-transform: uppercase;
+        font-size: 22px;
+        @media(max-width: 768px){
+          margin: 10px 0 10px 0;
+        }
+      }
+      .mcart-delete-btn{
+          border: none;
+          background: none;
+          cursor: pointer;
+      }
+      @media(max-width: 768px) {
+          .mcart-container{
+            right: -100vw;
+            width: calc(100vw - 20px);
+          }
+    .mcart-item-title {
+        font-size: 16px;
+    }
+    .mcart-subscription p {
+        font-size: 13px;
+    }
+    .mcart-final-price {
+        font-size: 16px;
+    }
+    .mcart-subtotal-title {
+        font-size: 16px;
+    }
+    .mcart-subtotal-price {
+        font-size: 16px;
+    }
+    .mcart-fc-show-details {
+        font-size: 13px;
+    }
+    .mcart-fc-price {
+        font-size: 16px;
+    }
+    .mcart-fc-btn {
+      font-size: 13px;
+    }
+    .mcart-fc-heading h3 {
+      font-size: 15px;
+    }
+    #mcart-checkout-form button {
+      font-size: 15px;
+    }
+      }
+
+  /* Yeasin Start */
+    .discounts__discount > .icon {
+      color: rgb(var(--color-foreground));
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-right: 0.7rem;
+  }
+  .mcart-empty-wrapper h3 {
+
+  }
+  .cart-collections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    .cart-collection-card {
+      .cart-image-wrapper {
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+      h4 {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+
+        svg {
+          path {
+            fill: #000;
+          }
+        }
+      }
+    }
+  }
+
+  /* Yeasin End */
+</style>
+
+{% liquid
+  assign linePrice = cart.total_price | money_without_currency
+%}
+
+{% unless template.name == 'cartx' %}
+  <mc-drawer data-id="{{ section.id }}" data-item-count="{{ cart.item_count }}">
+    <div class="my-cart my-cart-sec">
+      <div class="mcart-container">
+        <div class="mcart-wrapper">
+          <div class="mcart-header">
+            <div class="mcart-heading">
+              <p class="mcart-heading-p">
+                Your Cart
+                {% if cart.item_count > 0 %}
+                  ({{ cart.item_count }})
+                {% endif %}
+              </p>
+              <div type="button" class="mcart-close-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M5.58274 5.00014L10.0003 9.42408L9.42408 10.0003L5.00014 5.58274L0.5762 10.0003L0 9.42408L4.41754 5.00014L0 0.5762L0.5762 0L5.00014 4.41754L9.42408 0L10.0003 0.5762L5.58274 5.00014Z" fill="#000"/>
+                </svg>
+              </div>
+            </div>
+            {% comment %}
+              <div class="condition-slide">
+                {% render 'mcart-range-slider', cart: cart, free_shipping: section.settings.free_shipping %}
+              </div>
+            {% endcomment %}
+          </div>
+          <div class="mcart-body my-cart__items">
+            <div class="mcart-items-wrapper">
+              {% if cart.item_count == 0 %}
+                <div class="mcart-empty-wrapper">
+                  <h3>Empty Cart</h3>
+                </div>
+                <div class="cart-collections hidden">
+                  <div class="cart-collection-card">
+                    <div class="cart-image-wrapper">
+                      {{
+                        section.settings.collection.featured_image
+                        | image_url: width: section.settings.collection.featured_image.width
+                        | image_tag
+                      }}
+                    </div>
+                    <h4>
+                      {{ section.settings.collection.title }}
+                      {% render 'maze-icons', name: 'arrow-1' %}
+                    </h4>
+                  </div>
+                  <div class="cart-collection-card">
+                    <div class="cart-image-wrapper">
+                      {{
+                        section.settings.collection2.featured_image
+                        | image_url: width: section.settings.collection2.featured_image.width
+                        | image_tag
+                      }}
+                    </div>
+                    <h4>
+                      {{ section.settings.collection2.title }}
+                      {% render 'maze-icons', name: 'arrow-1' %}
+                    </h4>
+                  </div>
+                </div>
+              {% endif %}
+              {% for item in cart.items %}
+                {% assign itemIndex = forloop.index %}
+                <div class="mcart-item">
+                  <div class="mcart-item-error-msg">Error orrcoured</div>
+                  <div class="mcart-media">
+                    {% unless item.image == blank %}
+                      {{ item.image | image_url: width: 60 | image_tag: loading: 'lazy' }}
+                    {% endunless %}
+                  </div>
+                  <div class="mcart-info">
+                    <div class="mcart-item-title">
+                      <a href="{{ item.url }}">{{ item.title  | truncate: 50 | escape }}</a>
+                    </div>
+                    <div class="mcart-item-options">
+                      {% for option in item.options_with_values %}
+                        <div class="mcart-item-option {% if option.name == 'Title'  %} hidden {% endif %}">
+                          <strong>{{ option.name }}: </strong>
+                          <p>{{ option.value }}</p>
+                        </div>
+                      {% endfor %}
+                    </div>
+                    <div class="mcart-final-price">
+                      {% comment %}
+                        {{ item.final_line_price | money }}
+                      {% endcomment %}
+                      {%- if item.original_price != item.final_price -%}
+                        <div class="cart-item__discounted-prices">
+                          <span class="visually-hidden">
+                            {{ 'products.product.price.regular_price' | t }}
+                          </span>
+                          <s class="cart-item__old-price product-option">
+                            {{- item.original_price | money -}}
+                          </s>
+                          <span class="visually-hidden">
+                            {{ 'products.product.price.sale_price' | t }}
+                          </span>
+                          <strong class="cart-item__final-price product-option">
+                            {{ item.final_price | money }}
+                          </strong>
+                        </div>
+                      {%- else -%}
+                        <div class="product-option">
+                          {{ item.original_price | money }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                    <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                      {%- for discount in item.line_level_discount_allocations -%}
+                        <li class="discounts__discount">
+                          {%- render 'icon-discount' -%}
+                          {{ discount.discount_application.title }}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                    {% if item.selling_plan_allocation %}
+                      <div class="mcart-subscription">
+                        <p>{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                      </div>
+                    {% endif %}
+                  </div>
+                  <div class="mcart-action">
+                    <mc-itemdelete data-url="{{ item.url_to_remove | replace: '?','.json?' }}">
+                      <button
+                        type="button"
+                        class="mcart-delete-btn"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                          <path d="M4.25 1.7C4.25 1.24913 4.42911 0.81673 4.74792 0.497918C5.06673 0.179107 5.49913 0 5.95 0H11.05C11.5009 0 11.9333 0.179107 12.2521 0.497918C12.5709 0.81673 12.75 1.24913 12.75 1.7V3.4H16.15C16.3754 3.4 16.5916 3.48955 16.751 3.64896C16.9104 3.80837 17 4.02457 17 4.25C17 4.47543 16.9104 4.69163 16.751 4.85104C16.5916 5.01045 16.3754 5.1 16.15 5.1H15.2414L14.5044 15.4207C14.4739 15.8496 14.282 16.251 13.9673 16.544C13.6526 16.8371 13.2386 17 12.8087 17H4.1905C3.76052 17 3.34651 16.8371 3.03185 16.544C2.7172 16.251 2.52528 15.8496 2.49475 15.4207L1.7595 5.1H0.85C0.624566 5.1 0.408365 5.01045 0.248959 4.85104C0.0895533 4.69163 0 4.47543 0 4.25C0 4.02457 0.0895533 3.80837 0.248959 3.64896C0.408365 3.48955 0.624566 3.4 0.85 3.4H4.25V1.7ZM5.95 3.4H11.05V1.7H5.95V3.4ZM3.4629 5.1L4.19135 15.3H12.8095L13.538 5.1H3.4629Z" fill="#6B7280"/>
+                        </svg>
+                      </button>
+                    </mc-itemdelete>
+                    <mc-quantity>
+                      <button
+                        type="button"
+                        class="mcart-qty-btn"
+                        data-url="{{ routes.cart_change_url }}.json?line={{ itemIndex }}&quantity={{ item.quantity | minus: 1 }}"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="6" height="3" viewBox="0 0 6 3" fill="none">
+                          <path opacity="1" d="M0.319336 2.27344V0.401367H5.68945V2.27344H0.319336Z" fill="#000"/>
+                        </svg>
+                      </button>
+                      <p>{{ item.quantity }}</p>
+                      <button
+                        type="button"
+                        class="mcart-qty-btn"
+                        data-url="{{ routes.cart_change_url }}.json?line={{ itemIndex }}&quantity={{ item.quantity | plus: 1 }}"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+                          <path opacity="1" d="M8.70996 3.32031V5.20996H5.44043V8.48828H3.55078V5.20996H0.290039V3.32031H3.55078V0.0683594H5.44043V3.32031H8.70996Z" fill="#000"/>
+                        </svg>
+                      </button>
+                    </mc-quantity>
+                    <!-- <div class="mcart-final-price">{{ item.final_line_price | money }}</div> -->
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="mcart-items-footer">
+              <div class="mcart-coupon">
+                <button>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
+                    <path d="M5.83272 5.83314L5.82968 10.0303H5.28262L5.27958 5.83314L1.08243 5.8301L1.08244 5.28304L5.27958 5.28L5.28262 1.08286H5.82968L5.83272 5.28L10.0299 5.28304L10.0299 5.8301L5.83272 5.83314Z" fill="white"/>
+                  </svg>
+                </button>
+                <h5>Coupon Code</h5>
+              </div>
+              <div class="mcart-subtotals">
+                <h4 class="mcart-subtotal-title">Subtotal</h4>
+                <h4 class="mcart-subtotal-price">{{ cart.total_price | money }}</h4>
+              </div>
+              <a href="/collections/all" class="mcart-continue-shopping">Continue Shopping</a>
+              <div class="mcart-checkout">
+                {% form 'cart', cart, id: 'mcart-checkout-form' %}
+                  <button
+                    class="proceed_checkout_button"
+                    type="submit"
+                    name="checkout"
+                    {% if cart == empty %}
+                      disabled
+                    {% endif %}
+                  >
+                    Checkout
+                  </button>
+                {% endform %}
+              </div>
+               {% render 'maze-payments' %}
+            </div>
+          </div>
+          <div class="mcart-featured-collection hidden">
+            <div class="mcart-fc-heading">
+              <h3>Frequently Bought Together</h3>
+            </div>
+            <div class="mcart-fc-wrapper">
+              {% for product in section.settings.collection.products limit: 8 %}
+                <div class="mcart-item">
+                  <div class="mcart-media">
+                    {% unless product.featured_image == blank %}
+                      {{ product.featured_image | image_url: width: 60 | image_tag: loading: 'lazy' }}
+                    {% endunless %}
+                  </div>
+                  <div class="mcart-info">
+                    <div class="mcart-item-title">
+                      <a href="{{ product.url }}">{{ product.title }}</a>
+                    </div>
+                    {% unless product.has_only_default_variant %}
+                      <div class="mcart-item-options">
+                        <div class="mcart-item-option">
+                          <p>{{ product.variants.first.title | truncate: 10 }}</p>
+                        </div>
+                      </div>
+                    {% endunless %}
+                    <div class="mcart-subscription">
+                      <a class="mcart-fc-show-details" href="{{ product.url }}">Show Details</a>
+                    </div>
+                  </div>
+                  <div class="mcart-action">
+                    <div class="mcart-fc-price"><span class="money">$21.98</span></div>
+                    <div class="mcart-fc-form-wrapper">
+                      <quickadd-prod data-url="/cart/add.json?id={{ product.selected_or_first_available_variant.id }}&quantity=1&sections={{ section.id }}">
+                        {% form 'product', product %}
+                          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                          <input type="hidden" name="quantity" value="1">
+                          <button
+                            data-url="/cart/add.json?id={{ product.selected_or_first_available_variant.id }}&quantity=1&sections={{ section.id }}"
+                            class="mcart-fc-btn mcart-prod-add-to-cart"
+                            type="button"
+                          >
+                            Add to Cart
+                          </button>
+                        {% endform %}
+                      </quickadd-prod>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="mcart-footer"></div>
+        </div>
+      </div>
+    </div>
+  </mc-drawer>
+{% endunless %}
+
+<script>
+  class McDrawer extends HTMLElement{
+    constructor() {
+      super()
+      this.sectionName = this.dataset.id
+    }
+
+    connectedCallback() {
+      // this.querySelectorAll(".mcart-prod-add-to-cart").forEach(btn => {
+      //   btn.addEventListener("click", this.handleAddOnItem.bind(this))
+      // })
+    }
+
+    deleteItemEvent(url) {
+      this.updateCartItem(url)
+    }
+    
+    handleAddOnItem(e) {
+      this.updateCartItem(e.target.dataset.url)
+    }
+    
+    updateItemEvent(url, itemWrapper) {
+      this.itemWrapper = itemWrapper 
+      this.updateCartItem(url)
+    }
+
+    handleeQuickAddProduct(url, el) {
+      this.quickAddToCartTbn = el
+      el.innerHTML = 'Adding To Cart'
+      el.setAttribute("disabled", true)
+      this.updateCartItem(url)
+    }
+
+    updateCartItem(url) {
+      url = `${url}&sections=${this.dataset.id}`
+      fetch(url)
+      .then(res => {
+        return res.json()
+      })
+      .then(res => {
+        if(res.errors){
+          this.handleErrorMessage(res)
+          return
+        }
+        let html = new DOMParser().parseFromString(res.sections[this.sectionName], 'text/html')
+        this.renderElement(html)
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        if(this.quickAddToCartTbn) {
+          this.quickAddToCartTbn.innerHTML = 'Add To Cart'
+          this.quickAddToCartTbn.removeAttribute("disabled")
+        }
+      })
+    }
+
+    fetchSection() {
+      let parentThis = this
+      fetch(`${window.location.pathname}?sections=${this.dataset.id}`)
+      .then(res => res.json())
+      .then(res => {
+         if(res.errors){
+          return
+        }
+        let html = new DOMParser().parseFromString(res[this.sectionName], 'text/html')
+        this.renderElement(html)
+      })
+      .catch(err => console.log(err))
+    }
+
+    handleErrorMessage(res) {
+      this.itemWrapper.querySelector(".mcart-item-error-msg").innerHTML = res.errors
+      this.itemWrapper.classList.add("error")
+      setTimeout(() => {
+        this.itemWrapper.classList.remove("error")
+        this.loadingDisabled()
+      }, 2000)
+    }
+
+    renderElement(html) {
+     
+      if(this.querySelector(".mcart-items-wrapper"))
+        this.querySelector(".mcart-items-wrapper").innerHTML = html.querySelector(".mcart-items-wrapper").innerHTML
+      if(this.querySelector(".condition-slide"))
+        this.querySelector(".condition-slide").innerHTML = html.querySelector(".condition-slide").innerHTML
+      if(this.querySelector(".mcart-subtotals"))
+        this.querySelector(".mcart-subtotals").innerHTML = html.querySelector(".mcart-subtotals").innerHTML
+      if(this.querySelector(".mcart-checkout"))
+        this.querySelector(".mcart-checkout").innerHTML = html.querySelector(".mcart-checkout").innerHTML
+      if(document.querySelector(".cart_item_count"))
+        document.querySelector(".cart_item_count").innerHTML = html.querySelector("mc-drawer").dataset.itemCount
+
+      this.loadingDisabled()
+    }
+
+    open() {
+      this.fetchSection()
+      document.body.style.overflow = 'hidden'
+      this.querySelector(".my-cart-sec").classList.add("active")
+    }
+    close() {
+      document.body.style.overflow = 'unset'
+      this.querySelector(".my-cart-sec").classList.remove("active")
+    }
+
+    loadingEnabled() {
+      this.querySelector(".mcart-container").classList.add("loading")
+    }
+    loadingDisabled() {
+      this.querySelector(".mcart-container").classList.remove("loading")
+    }
+ 
+    debounce(fn, wait) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+  }
+
+  customElements.define("mc-drawer", McDrawer)
+
+  window.openCartDrawer = () => document.querySelector("mc-drawer").open()
+  window.closeCartDrawer = () => document.querySelector("mc-drawer").close()
+  
+
+
+  class McQuantity extends HTMLElement{
+    constructor() {
+      super()
+    }
+
+    connectedCallback() {
+      this.btns = this.querySelectorAll("button")
+      this.qtyElement = this.querySelector("p")
+
+      this.btns.forEach(btn => btn.addEventListener("click", this.handleEvent.bind(this)))
+    }
+
+    handleEvent(e) {
+      let url = '/cart.json',
+      wrapper = e.target.closest(".mcart-item")
+      if(e.target.tagName === "BUTTON")
+        url = e.target.dataset.url
+      if(e.currentTarget.tagName === "BUTTON")
+        url = e.currentTarget.dataset.url
+
+      let drawer = this.closest("mc-drawer")
+      drawer.loadingEnabled()
+      drawer.updateItemEvent(url, wrapper)
+    }
+
+    debounce(fn, wait) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+  }
+
+  customElements.define("mc-quantity", McQuantity)
+  
+  class McItemDelete extends HTMLElement{
+    constructor() {
+      super()
+    }
+
+    connectedCallback() {
+      this.addEventListener("click", this.handleEvent.bind(this))
+    }
+
+    handleEvent(e) {
+      let drawer = this.closest("mc-drawer")
+      drawer.loadingEnabled()
+      drawer.deleteItemEvent(this.dataset.url)
+    }
+  }
+  customElements.define("mc-itemdelete", McItemDelete)
+
+  
+  class QuickAddProduct extends HTMLElement{
+    constructor() {
+      super()
+    }
+
+    connectedCallback() {
+      this.addEventListener("click", this.handleEvent.bind(this))
+      this.button = this.querySelector("button")
+    }
+
+    handleEvent(e) {
+      let drawer = this.closest("mc-drawer")
+      drawer.loadingEnabled()
+      drawer.handleeQuickAddProduct(this.dataset.url, this.button)
+    }
+  }
+  customElements.define("quickadd-prod", QuickAddProduct)
+
+
+  window.customFormSubmit = () => {
+    document.querySelectorAll(".product-form__submit").forEach(btn => {
+      btn.addEventListener("click", e => {
+        e.preventDefault();
+        let form = btn.closest("form")
+        let formData = new FormData(form)
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          return response.json();
+        })
+        .then(response => {
+          openCartDrawer()
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        })
+        .finally(()=>{
+          closeSearchDrawer();
+        })
+      })
+    })
+  }
+  
+  customFormSubmit()
+  
+  if(document.querySelectorAll(".new-header-cart-icon")) {
+    document.querySelectorAll(".new-header-cart-icon").forEach(btn => {
+      btn.addEventListener("click", e => {e.preventDefault(); openCartDrawer()})
+    });
+  }
+  if(document.querySelector(".mcart-close-btn")) document.querySelector(".mcart-close-btn").addEventListener("click", closeCartDrawer);
+</script>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection2",
+      "label": "Select Collection"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping",
+      "label": "Free Shipping Over $n",
+      "default": 100
+    }
+  ]
+}
+{% endschema %}

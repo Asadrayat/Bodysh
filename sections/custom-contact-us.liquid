@@ -1,0 +1,322 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+
+  @media(max-width: 768px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+  .heading-{{ id }}{
+    color: var(--Content-Base-main, #1F2937);
+    font-family: satoshi medium;
+    font-size: 42px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 46px;
+    letter-spacing: -1.26px;
+    text-transform: capitalize;
+    margin: 0 0 40px 0;
+    text-align: center;
+  }
+  .wrapper-{{ id }}{
+    max-width: 768px;
+    margin: auto;
+    /* display: grid; */
+    /* grid-template-columns: repeat(2,1fr); */
+    /* grid-gap: 40px; */
+  }
+  .form-{{ id }} label{
+    color: #000;
+    font-size: 16px;
+    line-height: 20px; /* 125% */
+  }
+  .form-{{ id }} input, .form-{{ id }} textarea{
+    width: 100%;
+    outline: none;
+    box-shadow: none;
+    border: 1px solid #E6E6E6;
+    background: #FAFAFA;
+    padding: 14px 18px;
+  }
+  .form-{{ id }} input:focus, .form-{{ id }} textarea:focus{
+    outline: none;
+    box-shadow: none;
+  }
+  .field-cf {
+    margin-bottom: 16px;
+  }
+  .form-{{ id }} .contact__button-cf{
+    margin: 16px 0 0;
+  }
+  .form-{{ id }} button{
+    border-radius: 4px;
+    background: var(--Primary, #603);
+    color: #FFF;
+    font-family: satoshi regular;
+    padding: 16px 0;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    width: 100%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+  }
+  .contact-items-{{ id }} a{
+    display: block;
+    width: max-content;
+  }
+
+  .contact-{{ id }} h4{
+    color: #000;
+    font-size: 50px;
+    line-height: 121.5%; /* 60.75px */
+    text-transform: uppercase;
+    margin: 0 0 24px;
+  }
+  .contact-{{ id }} p{
+    color: var(--Content-Base-base, #4B5563);
+    font-size: 18px;
+    line-height: 26px; /* 144.444% */
+    margin: 0;
+  }
+  .contact-items-{{ id }}{
+    margin: 40px 0 0;
+  }
+  .contact-items-{{ id }} a:not(:last-child){
+    margin: 0 0 16px;
+  }
+  .contact-items-{{ id }} a{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--Content-Base-base, #4B5563);
+    font-size: 16px;
+    line-height: 24px; /* 150% */
+    text-decoration: none;
+  }
+  .contact-items-{{ id }} a img{
+    width: 24px;
+    height: 24px;
+  }
+
+  @media screen and (max-width: 768px){
+    .heading-{{ id }}{
+      font-size: 32px;
+      text-align: center;
+      margin: 0 0 24px;
+    }
+    .wrapper-{{ id }}{
+      grid-template-columns: 1fr;
+      grid-gap: 32px;
+    }
+    .form-{{ id }} label{
+      font-size: 14px;
+      line-height: 18px; /* 125% */
+    }
+    .form-{{ id }} input, .form-{{ id }} textarea{
+      padding: 12px 14px;
+    }
+    .form-{{ id }} .contact__button-cf{
+      margin: 16px 0 0;
+    }
+    .form-{{ id }} button{
+      font-size: 18px;
+      padding: 14px 0;
+      min-width: 100%;
+    }
+    .contact-{{ id }} h4{
+      font-size: 32px;
+      margin: 0 0 16px;
+    }
+    .contact-{{ id }} p{
+      font-size: 16px;
+      line-height: 20px; /* 144.444% */
+    }
+    .contact-items-{{ id }}{
+      margin: 24px 0 0;
+    }
+    .contact-items-{{ id }} a:not(:last-child){
+      margin: 0 0 12px;
+    }
+    .contact-items-{{ id }} a{
+      font-size: 14px;
+      line-height: 20px; /* 150% */
+    }
+    .contact-items-{{ id }} a img{
+      width: 16px;
+      height: 16px;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <h2 class="heading-{{ id }}">{{ 'Contact Us' }}</h2>
+    <div class="wrapper-{{ id }}">
+      <div class="form-{{ id }}">
+        {% render 'custom-contact-form', section %}
+      </div>
+      {% comment %}<div class="contact-{{ id }}">
+        <h4>{{ 'CONTACT US' }}</h4>
+        <p>{{ 'Please have your order number ready.' }}</p>
+        <div class="contact-items-{{ id }}">
+          {% for block in section.blocks %}
+            {% if block.settings.image %}
+              <a href="{{ block.settings.link | default: '#' }}">
+                {{- block.settings.image | image_url: width: 30 | image_tag -}}
+                {% if block.settings.title != blank %}
+                  {{ block.settings.title }}
+                {% endif %}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>{% endcomment %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Contact",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Select Image"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Contact"
+    }
+  ]
+}
+{% endschema %}

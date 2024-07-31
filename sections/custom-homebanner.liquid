@@ -1,0 +1,281 @@
+{% assign id = section.id %}
+<style>
+    #shopify-section-{{ id }} {
+     margin-top: {{ section.settings.margin_top }}px;
+     margin-bottom: {{ section.settings.margin_bottom }}px;
+     padding-top: {{ section.settings.padding_top }}px;
+     padding-bottom: {{ section.settings.padding_bottom }}px;
+     background-image: url('{{ section.settings.bg_img | image_url: width: section.settings.bg_img.width }}');
+      height: calc(100vh - 145px);
+      background-position: inherit;
+      background-size: cover;
+      background-repeat: no-repeat;
+      width: 100%;
+    }
+  .mobile_only{
+    display: none;
+  }
+    .section-{{ id }}{
+      height: 100%;
+    }
+    .container-{{ id }}{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 100%;
+        align-items: center;
+      @media(max-width: 768px){
+        grid-template-columns: 1fr;
+        align-items: self-start;
+        align-content: space-between;
+      }
+    }
+   .btn-wrapper{
+     justify-self: end;
+     @media(max-width: 768px){
+        justify-self: unset;
+      }
+      a{
+        max-width: 360px;
+        margin: 24px 0 0 0;
+        background: var(--Primary, #603);
+        box-shadow: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+        display: flex;
+        justify-content: space-between;
+        min-width: 400px;
+        padding: var(--Spacing-Container-xs, 12px) var(--Spacing-Container-lg, 32px);
+        align-items: center;
+        gap: 8px;
+        color: #FFF;
+        /* font-family: Satoshi; */
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 32px;
+        text-decoration: none;
+        flex-shrink: 0;
+        flex: 1 0 0;
+      @media(max-width: 768px){
+        min-width: 100%;
+      }
+        svg{
+          /* stroke-width: 2px; */
+          /* stroke: #FFF; */
+          width: 60px;
+          flex-shrink: 0;
+        }
+      }
+    }
+    .heading-{{ id }}{
+      max-width: 640px;
+      @media(max-width: 768px){
+        max-width: 100%;
+      }
+      h2{
+        color: var(--Content-Base-main, #1F2937);
+        font-family: satoshi medium;
+        font-size: 64px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 64px;
+        margin: 0;
+        @media(max-width: 1400px){
+          font-size: 48px;
+          line-height: 48px;
+        }
+        @media(max-width: 768px){
+          font-size: 36px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: 44px;
+        }
+      }
+      p{
+        color: var(--Content-Base-main, #1F2937);
+       font-family: satoshi regular;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 32px; /* 133.333% */
+        margin: 16px 0 0 0 ;
+        @media(max-width: 768px){
+          font-size: 18px;
+          line-height: 24px;
+          margin: 6px 0 0 0 ;
+        }
+      }
+    }
+  @media screen and (max-width: 890px){
+     #shopify-section-{{ id }} {
+       margin-top: {{ section.settings.margin_top-m }}px;
+       margin-bottom: {{ section.settings.margin_bottom-m }}px;
+       padding-top: {{ section.settings.padding_top-m }}px;
+       padding-bottom: {{ section.settings.padding_bottom-m }}px;
+       background-image: url('{{ section.settings.bg_img_mobile | image_url: width: section.settings.bg_img_mobile.width }}');
+       height: calc(100vh - 110px);
+    }
+    . {
+      display: block;
+    }
+    .desktop_only {
+      display: none;
+    }
+  }
+</style>
+<section class="section-{{ id }}">
+  <div class="container-{{ id }} {% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="heading-{{ id }}">
+      <div>
+        <h2>{{ section.settings.title }}</h2>
+        <p>{{ section.settings.subtitle }}</p>
+      </div>
+      {% capture btn %}<div class="btn-wrapper">
+        <a href="{{ section.settings.btn_url }}">
+          {{- section.settings.btn -}}
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path d="M6.66699 16.0001H25.3337M25.3337 16.0001L16.0003 6.66675M25.3337 16.0001L16.0003 25.3334" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>{% endcapture %}
+      <div class="desktop_only">{{ btn }}</div>
+    </div>
+    <div class="mobile_only">{{ btn }}</div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Homne Banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_img",
+      "label": "Background image desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_img_mobile",
+      "label": "Background image mobile"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "THE WORLD’S MOST COMFORTABLE ACTIVE INTIMATES"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Performance meets style for your toughest workouts and action-packed days"
+    },
+    {
+      "type": "text",
+      "id": "btn",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button Url"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Spacing (Mobile)"
+    },
+    {
+      "type": "range",
+      "id": "margin_top-m",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom-m",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top-m",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top  (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom-m",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom  (Mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [
+  ],
+  "presets":[
+    {
+      "name": "Custom Homne Banner"
+    }
+  ]
+}
+{% endschema %}

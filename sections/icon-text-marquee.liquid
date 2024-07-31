@@ -1,0 +1,231 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    background: #000;
+  }
+
+  @media(max-width: 768px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+
+  .sec2-{{ id }} {
+    .marqueeSwiper {
+      .swiper-wrapper{
+        --swiper-wrapper-transition-timing-function: linear;
+        .swiper-slide{
+          display: flex;
+          gap: 5px;
+          align-items: center;
+          flex-grow: 1;
+          width: max-content;
+          @media(max-width: 768px) {
+            gap: 5px;
+          }
+          img{
+            height: 55px;
+            @media(max-width: 768px) {
+              height: 32px;
+              width: auto;
+              object-fit: cover;
+            }
+          }
+          h3{
+            margin: 0;
+            color: #E6E6E6;
+            text-align: center;
+            font-family: satoshi medium;
+            font-size: 32px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 34px;
+            @media(max-width: 768px) {
+              font-size: 20px;
+              line-height: 24px;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+
+<div
+  class="sec2-{{ id }} {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
+  {% if settings.animations_reveal_on_scroll %}
+    data-cascade
+  {% endif %}
+>
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="swiper marqueeSwiper marquee-{{ id }}">
+        <div class="swiper-wrapper">
+          {% for i in (1..2) %}
+            {% for block in section.blocks %}
+              <div class="swiper-slide">
+                {% unless block.settings.image == blank %}
+                  {{ block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: 'lazy' }}
+                {% endunless %}
+                <h3>{{ block.settings.text }}</h3>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", e => {
+    new Swiper(".marquee-{{ id }}", {
+      slidesPerView: 'auto',
+      spaceBetween: 40,
+      loop: true,
+      speed: 5000,
+      autoplay: {
+        delay: 0
+      },
+      breakpoints: {
+        100:{
+          spaceBetween: 24,
+        },
+        769:{
+          spaceBetween: 40
+        }
+      }
+    })
+  })
+</script>
+
+{% schema %}
+{
+  "name": "Icon Text Marquee",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon Text Marquee"
+    }
+  ]
+}
+{% endschema %}

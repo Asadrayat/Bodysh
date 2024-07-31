@@ -1,0 +1,27 @@
+<div class="featured-card">
+  <a class="absolute-link" href="{{ product.url }}"></a>
+  <div class="featured-img-wrapper">
+    {{ product.featured_image | image_url: width: product.featured_image.width | image_tag }}
+    <div class="featured-product-btn">
+      {% form 'product', product, class: 'new-product-card-form' %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button class="product-form__submit" href="#" type="submit">
+          {%- if product.selected_or_first_available_variant.available %}
+            Buy Now
+          {% else %}
+            SOLD OUT
+          {% endif -%}
+        </button>
+      {% endform %}
+    </div>
+  </div>
+
+  <div class="featured-product-details">
+    <a href="{{ product.url }}">
+      <h3>{{ product.title | truncatewords: 3 }}</h3>
+    </a>
+    <p>{{ product.price | money }}</p>
+  </div>
+</div>
+

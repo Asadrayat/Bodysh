@@ -1,0 +1,191 @@
+{{ 'featured-card.css' | asset_url | stylesheet_tag }}
+<style>
+    .section-container--{{ section.id }}{
+      margin-top: {{ section.settings.margin_top | append:'px' }};
+      margin-bottom: {{ section.settings.margin_bottom | append:'px' }};
+      padding-top: {{ section.settings.padding_top | append:'px' }};
+      padding-bottom: {{ section.settings.padding_bottom | append:'px' }};
+      overflow: hidden;
+    }
+
+
+    @media screen and (max-width: 768px){
+      .section-container--{{ section.id }}{
+        margin-top: {{ section.settings.margin_top_mobile | append:'px' }};
+        margin-bottom: {{ section.settings.margin_bottom_mobile | append:'px'  }};
+        padding-top: {{ section.settings.padding_top_mobile | append:'px' }};
+        padding-bottom: {{ section.settings.padding_bottom_mobile | append:'px' }};
+      }
+
+    }
+  .section-container--{{ section.id }}{
+       .section-wrapper--{{ section.id }}{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+          @media(max-width: 768px){
+            display: block ;
+            padding: 0 16px;
+          }
+        }
+        .img-wrapper{
+          line-height: 0;
+          @media(max-width: 768px){
+            display: none;
+          }
+        }
+        .img-wrapper img{
+            /* max-width: 100%;
+            height: auto;
+            max-height: 880px; */
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            object-position: center;
+        }
+  }
+</style>
+
+{% capture img_box %}
+      {{ section.settings.product.featured_image | image_url: width: section.settings.product.featured_image.width | image_tag : class: ""}}
+{% endcapture %}
+
+<section class="section-container--{{ section.id }}">
+  <div class="section-wrapper--{{ section.id }}">
+    <div class="img-wrapper {% if section.settings.position != 'left' %}hidden{% endif %}">
+      {{ img_box }}
+    </div>
+    <div class="featured-card-wrapper">
+      {% render 'featured-card', product: section.settings.product %}
+    </div>
+    <div class="img-wrapper {% if section.settings.position != 'right' %}hidden{% endif %}">
+      {{ img_box }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Custom Featured Product",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "header",
+      "content": "Settings"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "default": "left",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Top (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Margin Bottom (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Top  (Mobile)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding Bottom  (Mobile)",
+      "default": 0
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Custom Featured Product"
+    }
+  ]
+}
+{% endschema %}

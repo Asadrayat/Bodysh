@@ -1,0 +1,174 @@
+<style>
+  .pd-tab-accordion-container{
+    margin-top: 0px;
+    @media(max-width: 768px) {
+      margin-top: 0;
+    }
+
+    @media(min-width: 769px) {
+      .pd-tab-accordion-desktop{
+        display: block;
+      }
+      .pd-tab-accordion-mobile{
+        display: none;
+      }
+    }
+    @media(max-width: 768px) {
+      .pd-tab-accordion-desktop{
+        display: none;
+      }
+      .pd-tab-accordion-mobile{
+        display: block;
+      }
+    }
+
+
+    .pd-tab-summery {
+      display: grid;
+      grid-template-columns: 1fr 17px;
+      grid-column-gap: 30px;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 20px 12px;
+      border-top: 1px solid #D9D9D9;
+      cursor: pointer;
+      @media(max-width:768px){
+        padding: 12px 12px;
+      }
+
+      h2{
+        color: var(--Content-Base-main, #1F2937);
+        font-family: satoshi regular;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 24px; /* 150% */
+        margin: 0;
+        @media(max-width: 768px){
+          font-size: 16px;
+        }
+      }
+      .pd-tab-icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+
+        .plus{
+          position: absolute;
+          transition: .4s;
+        }
+        .minus{
+          position: absolute;
+          visibility: hidden;
+          transition: .4s;
+        }
+      }
+
+      @media(max-width: 768px) {
+        grid-template-columns: 1fr 14px;
+        grid-column-gap: 10px;
+        padding: 12px 8px 12px 8px;
+      }
+    }
+    .pd-tabs-wrapper.active{
+      .pd-tab-icons {
+        .plus{
+          visibility: hidden;
+          transition: .4s;
+          transform: rotate(90deg);
+        }
+        .minus{
+          visibility: visible;
+          transition: .4s;
+          transform: rotate(180deg);
+        }
+      }
+      .pd-tab-details {
+        margin-bottom: 20px;
+      }
+    }
+
+    .pd-tab-details {
+      box-sizing: border-box;
+      padding-inline: 12px;
+      height: 0px;
+      overflow: hidden;
+
+      .pdt-description,
+      .pdt-richtext,
+      .description,
+      .pdt-page{
+        color: #000;
+        font-size: 15px;
+        /* font-style: normal; */
+        font-weight: 400;
+        line-height: 22px;
+        @media(max-width: 768px) {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  .tab-image_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    img{
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+  }
+</style>
+
+<div class="pd-tab-accordion-container {% if block.settings.block_mb %}mb{% endif %}">
+  <div class="pd-tab-accordion-{{ class }}">
+    {% for block in tabs %}
+      <div class="pd-tabs-wrapper">
+        <div class="pd-tab-summery">
+          <h2>{{ block.settings.heading }}</h2>
+          <div class="pd-tab-icons">
+            {% render 'tab-icons', name: 'plus' %}
+            {% render 'tab-icons', name: 'minus' %}
+          </div>
+        </div>
+        <div class="pd-tab-details">
+          {% case block.settings.tab_content %}
+            {% when 'richtext' %}
+              <div class="pdt-richtext">
+                {{ block.settings.richtext }}
+              </div>
+            {% when 'img' %}
+              <div class="tab-single_image_wrapper">
+                {{ block.settings.image | image_url: width: block.settings.image.width | image_tag }}
+              </div>
+            {% when 'meta_image' %}
+              {% if product.metafields.custom.tab_image.value %}
+                <div class="tab-image_wrapper">
+                  {% for media in product.metafields.custom.tab_image.value %}
+                    {{ media | image_url: width: media.width | image_tag }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% when 'description' %}
+              <div class="pdt-description">
+                {{ product.description }}
+              </div>
+          {% endcase %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", e => {
+    new Accordion('.pd-tab-accordion-{{ class }}', {
+      closeAll: true,
+      initOpenIndex: 1,
+      duration: 500,
+      activeClass: 'active'
+    })
+  })
+</script>

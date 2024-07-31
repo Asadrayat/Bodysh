@@ -1,0 +1,374 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+
+  @media(max-width: 768px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+  .home-banner--{{ id }} .swiper-slide{
+    font-size: 0;
+    line-height: 0;
+  }
+  .home-banner--{{ id }} .rating-wrapper{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    @media(max-width: 768px){
+      gap: 8px;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  }
+  .home-banner--{{ id }} .rating-wrapper img{
+    max-width: 108px;
+    height: auto;
+    @media(max-width: 768px){
+       height: auto !important;
+    }
+  }
+  .home-banner--{{ id }} .rating-wrapper p{
+    color: #FFF;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 22px; /* 122.222% */
+    text-transform: uppercase;
+    margin-bottom: 35px;
+    @media(max-width: 768px){
+      margin-bottom: 0px;
+    }
+  }
+  .home-banner--{{ id }} .swiper-slide img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+    @media(max-width: 768px){
+      width: 100%;
+      height: calc(100vh - 140px);
+      object-fit: cover;
+    }
+  }
+
+  /* .home__banner-text h4{
+    color: #000;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0;
+  } */
+  .home__banner-text h2{
+    color: #FFF;
+    font-family: satoshi medium;
+    margin: 0;
+    font-size: 42px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 46px;
+    letter-spacing: -1.26px;
+    text-transform: capitalize;
+    padding-top: 32px;
+  }
+  .button-arrow{
+    margin-left: 8px;
+    width: 16px;
+  }
+  .home__banner-text p{
+    color: #FFF;
+    /* font-family: Satoshi; */
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+    margin: 0;
+    padding-bottom: 64px;
+  }
+  .home-banner--{{ id }} .btn-wrapper{
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 8px;
+    position: absolute;
+    top: calc( 100% - 64px );
+    right: 40px;
+    @media(max-width: 768px){
+      display: none;
+    }
+  }
+  .home-banner--{{ id }} .swiper-button-next:after, .home-banner--{{ id }} .swiper-button-prev:after
+  {
+    content: " ";
+  }
+  .home-banner--{{ id }} .swiper-button-next, .home-banner--{{ id }} .swiper-button-prev{
+    position: relative;
+    width: auto;
+    height: auto;
+    right: unset;
+    left: unset;
+  }
+  @media screen and (min-width: 769px){
+    .home__banner-text{
+        max-width: 800px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        /* transform: translate(32px,32px); */
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+  }
+
+  @media screen and (max-width: 768px){
+    .home__banner-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 96%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .home__banner-text a {
+      justify-content: center;
+      margin-top: 20px;
+      width: -webkit-fill-available;
+    }
+    .home-banner--{{ id }} #pagination--{{ section.id }}{
+      position: absolute;
+      margin-block-start: 24px;
+    }
+    .home__banner-text h4{
+      font-size: 17px;
+    }
+    .home__banner-text h2{
+      font-size: 32px;
+      line-height: 36px;
+    }
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="">
+    <div class="home-banner--{{ id }}">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            <div class="swiper-slide">
+              {% liquid
+                assign lg_image = block.settings.image
+                assign sm_image = block.settings.image_m
+                if sm_image == blank
+                  assign sm_image = lg_image
+                endif
+              %}
+              <picture>
+                <source media="(min-width:769px)" srcset="{{ lg_image | image_url: width: lg_image.width }}">
+                {{ sm_image | image_url: width: 400 | image_tag }}
+              </picture>
+              {% if block.settings.subtitle != blank
+                or block.settings.title != blank
+                or block.settings.text != blank
+                or block.settings.btn_text != blank
+              %}
+                <div class="home__banner-text {% unless section.settings.full_width %}page-width{% endunless %}">
+                  {% if block.type == '@app' %}
+                    {% render block %}
+                  {% endif %}
+                  {% if block.settings.title != blank %}
+                    <h2>{{ block.settings.title }}</h2>
+                  {% endif %}
+                  {% if block.settings.user_text != blank %}
+                    <p>
+                      {{- block.settings.user_text -}}
+                    </p>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="btn-wrapper">
+          <div class="swiper-button-next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="24" viewBox="0 0 42 24" fill="none">
+              <path d="M41.0607 13.0607C41.6464 12.4749 41.6464 11.5251 41.0607 10.9393L31.5147 1.3934C30.9289 0.807611 29.9792 0.807611 29.3934 1.3934C28.8076 1.97919 28.8076 2.92893 29.3934 3.51472L37.8787 12L29.3934 20.4853C28.8076 21.0711 28.8076 22.0208 29.3934 22.6066C29.9792 23.1924 30.9289 23.1924 31.5147 22.6066L41.0607 13.0607ZM0 13.5H40V10.5H0V13.5Z" fill="white"/>
+            </svg>
+          </div>
+          <div class="swiper-button-prev">
+            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="24" viewBox="0 0 42 24" fill="none">
+              <path d="M0.93934 10.9393C0.353553 11.5251 0.353553 12.4749 0.93934 13.0607L10.4853 22.6066C11.0711 23.1924 12.0208 23.1924 12.6066 22.6066C13.1924 22.0208 13.1924 21.0711 12.6066 20.4853L4.12132 12L12.6066 3.51472C13.1924 2.92893 13.1924 1.97919 12.6066 1.3934C12.0208 0.807611 11.0711 0.807611 10.4853 1.3934L0.93934 10.9393ZM2 13.5H42V10.5H2V13.5Z" fill=" white"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", (event) => {
+    new Swiper(".home-banner--{{ id }} .swiper", {
+      slidesPerView: 1,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    })
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Banner Slider",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "Image",
+      "name": "Block",
+      "settings": [
+        {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+        },
+        {
+           "type": "image_picker",
+           "id": "image_m",
+           "label": "Image(Mobile)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "user_text",
+          "label": "User Name",
+          "default": "Alex Pedro"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Banner Slider"
+    }
+  ]
+}
+{% endschema %}

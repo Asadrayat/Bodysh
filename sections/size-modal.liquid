@@ -1,0 +1,118 @@
+<style>
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  }
+
+  .popup.show {
+    display: block !important;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .popupContent {
+    background: white;
+    padding: 20px;
+    max-width: 650px;
+    border-radius: 5px;
+    transform: scale(0.5) translate(-50%, -50%);
+    transition: transform 0.3s ease-in-out;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(10px, 10px);
+  }
+  .popup.show .popupContent {
+    transform: scale(1) translate(-50%, -50%);
+  }
+  .popup-closer{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .popup-closer button{
+    cursor: pointer;
+  }
+  .popup-image img{
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  @media screen and (max-width: 768px){
+    .popupContent {
+      width: 90%;
+    }
+  }
+</style>
+
+<div class="popup hidden">
+  <div class="popupContent">
+    <div class="popup-closer">
+      <button class="closePopup">&#x2715</button>
+    </div>
+    <div class="popup-image">
+      {% if section.settings.image %}
+        {{ section.settings.image | image_url: width: 1024 | image_tag }}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const openPopupBtns = document.querySelectorAll('.openPopup');
+    const closePopupBtn = document.querySelector('.closePopup');
+    const popup = document.querySelector('.popup');
+    const popupContent = document.querySelector('.popupContent');
+
+    openPopupBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            popup.classList.add('show');
+        });
+    });
+
+    closePopupBtn.addEventListener('click', () => {
+        popup.classList.remove('show');
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.classList.remove('show');
+        }
+    });
+  });
+</script>
+{% schema %}
+{
+  "name": "Size Modal",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Select Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Size Modal"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,25 @@
+{% case name %}
+  {% when 'plus' %}
+    <svg
+      class="plus {{ class }}"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path d="M11.9998 4.79999L11.9998 19.2M19.1998 12L4.7998 12" stroke="black" stroke-linecap="round"/>
+    </svg>
+
+  {% when 'minus' %}
+    <svg
+      class="minus {{ class }}"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path d="M19.1998 12L4.7998 12" stroke="black" stroke-linecap="round"/>
+    </svg>
+{% endcase %}
